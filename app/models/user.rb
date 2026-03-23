@@ -14,19 +14,14 @@ class User < ApplicationRecord
   validates :last_name, presence: true,
                         length: { minimum: 2, maximum: 50 }
 
-  # address (string)
-  validates :address, presence: true,
-                      length: { minimum: 5 }
-
-  # city (string)
-  validates :city, presence: true
-
-  # postal_code (string)
-  validates :postal_code, presence: true,
-                          format: { with: /\A[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d\z/,
-                                    message: "invalid Canadian postal code" }
-
-  # province_id (integer FK)
+  # province
   validates :province_id, presence: true,
                           numericality: { only_integer: true }
+
+  # Address
+  validates :address, length: { minimum: 5 }, allow_blank: true
+  validates :city, presence: true, if: -> { address.present? }
+  validates :postal_code,
+            format: { with: /\A[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d\z/ },
+            allow_blank: true
 end
