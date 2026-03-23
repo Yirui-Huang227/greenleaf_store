@@ -65,3 +65,11 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'activeadmin'
+gem 'devise', '~> 4.9' # required by ActiveAdmin
+gem "sassc-rails"
+gem "image_processing", "~> 1.2"
+gem 'kaminari'
+gem 'faker'
+gem 'stripe'
