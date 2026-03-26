@@ -9,4 +9,12 @@ class Category < ApplicationRecord
   # description (text)
   validates :description, presence: true,
                           length: { minimum: 5 }
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "description", "id", "name", "updated_at"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["categorizations", "products"]
+  end
 end
