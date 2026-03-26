@@ -1,6 +1,6 @@
 class Category < ApplicationRecord
-  has_many :product_categories
-  has_many :products, through: :product_categories
+  has_many :categorizations, dependent: :destroy
+  has_many :products, through: :categorizations
 
   # name (string)
   validates :name, presence: true,

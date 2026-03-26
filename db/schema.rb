@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_23_003950) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_26_002732) do
+  create_table "about_pages", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "about"
+    t.text "contact"
+    t.integer "admin_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_user_id"], name: "index_about_pages_on_admin_user_id"
+  end
+
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -44,6 +54,48 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_23_003950) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "categorizations", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_categorizations_on_category_id"
+    t.index ["product_id"], name: "index_categorizations_on_product_id"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "product_id", null: false
+    t.string "product_name", null: false
+    t.decimal "price_at_purchase", precision: 10, scale: 2, null: false
+    t.integer "quantity", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "order_province_id"
+    t.string "order_address"
+    t.string "order_city"
+    t.string "order_postal_code"
+    t.string "status"
+    t.decimal "subtotal"
+    t.decimal "gst_rate"
+    t.decimal "pst_rate"
+    t.decimal "hst_rate"
+    t.decimal "gst_amount"
+    t.decimal "pst_amount"
+    t.decimal "hst_amount"
+    t.decimal "total"
+    t.string "stripe_payment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -54,6 +106,17 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_23_003950) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "provinces", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "code", null: false
+    t.decimal "gst", precision: 5, scale: 3, default: "0.0"
+    t.decimal "pst", precision: 5, scale: 3, default: "0.0"
+    t.decimal "hst", precision: 5, scale: 3, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_provinces_on_code", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -62,8 +125,22 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_23_003950) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address"
+    t.string "city"
+    t.string "postal_code"
+    t.integer "province_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["province_id"], name: "index_users_on_province_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "about_pages", "admin_users"
+  add_foreign_key "categorizations", "categories"
+  add_foreign_key "categorizations", "products"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "users"
+  add_foreign_key "users", "provinces"
 end
