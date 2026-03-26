@@ -14,7 +14,7 @@ ActiveAdmin.register Product do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  permit_params :name, :description, :price, :on_sale, :quantity, category_ids: []
+  permit_params :name, :description, :price, :on_sale, :quantity, :image, category_ids: []
 
   index do
     selectable_column
@@ -24,7 +24,11 @@ ActiveAdmin.register Product do
     column :quantity
     column :on_sale
     column("Categories") { |product| product.categories.map(&:name).join(", ") }
-    column :created_at
+    column :image do |product|
+      if product.image.attached?
+        image_tag url_for(product.image), width: 80
+      end
+    end
     actions
   end
 
@@ -32,7 +36,7 @@ ActiveAdmin.register Product do
   filter :price
   filter :on_sale
   filter :quantity
-  filter :categories_name, as: :string, label: "Category"
+  filter :categories
   filter :created_at
 
   form do |f|
@@ -43,6 +47,7 @@ ActiveAdmin.register Product do
       f.input :quantity
       f.input :on_sale
       f.input :categories, as: :check_boxes
+      f.input :image, as: :file
     end
     f.actions
   end
@@ -56,6 +61,11 @@ ActiveAdmin.register Product do
       row :quantity
       row :on_sale
       row("Categories") { |product| product.categories.map(&:name).join(", ") }
+      row :image do |product|
+        if product.image.attached?
+          image_tag url_for(product.image), width: 150
+        end
+      end
       row :created_at
       row :updated_at
     end
