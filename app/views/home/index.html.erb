@@ -1,2 +1,5 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<h1>Welcome to Greenleaf Store</h1>
+
+<div class="products-grid">
+  <%= render partial: "products/product_card", collection: @featured_products, as: :product %>
+</div>
