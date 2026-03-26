@@ -6,3 +6,5 @@
 <div class="products-grid">
   <%= render partial: "product_card", collection: @products, as: :product %>
 </div>
+
+<%= paginate @products %>
