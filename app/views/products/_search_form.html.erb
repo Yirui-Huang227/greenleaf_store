@@ -12,6 +12,13 @@
   </div>
 
   <div>
+    <%= label_tag :filter, "Filter" %>
+    <%= select_tag :filter,
+        options_for_select([["On Sale", "sale"], ["New", "new"], ["Recently Updated", "recent"]], params[:filter]),
+        include_blank: "All Products" %>
+  </div>
+
+  <div>
     <%= submit_tag "Filter" %>
   </div>
 <% end %>

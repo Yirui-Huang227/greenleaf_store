@@ -2,6 +2,17 @@ class ProductsController < ApplicationController
   def index
     @products = Product.includes(:categories).order(created_at: :desc)
 
+    if params[:filter].present?
+      case params[:filter]
+      when "sale"
+        @products = @products.on_sale
+      when "new"
+        @products = @products.new_arrivals
+      when "recent"
+        @products = @products.recently_updated
+      end
+    end
+
     if params[:keyword].present?
       @products = @products.where("name LIKE ? OR description LIKE ?", "%#{params[:keyword]}%", "%#{params[:keyword]}%")
     end

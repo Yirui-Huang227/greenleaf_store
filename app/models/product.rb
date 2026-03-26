@@ -11,4 +11,8 @@ class Product < ApplicationRecord
   def self.ransackable_associations(auth_object = nil)
     ["categories", "categorizations"]
   end
+
+  scope :on_sale, -> { where(on_sale: true) }
+  scope :new_arrivals, -> { where("created_at >= ?", 3.days.ago) }
+  scope :recently_updated, -> { order(updated_at: :desc) }
 end
