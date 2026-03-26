@@ -1,0 +1,12 @@
+<div class="product-card">
+  <h3><%= link_to product.name, product_path(product) %></h3>
+  <p><%= number_to_currency(product.price) %></p>
+  <p><%= truncate(product.description, length: 80) %></p>
+
+  <% if product.categories.any? %>
+    <p>
+      Categories:
+      <%= product.categories.map(&:name).join(", ") %>
+    </p>
+  <% end %>
+</div>

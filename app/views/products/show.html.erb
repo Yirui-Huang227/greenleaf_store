@@ -1,2 +1,12 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
+<h1><%= @product.name %></h1>
+
+<p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
+<p><strong>Description:</strong> <%= @product.description %></p>
+<p><strong>Stock:</strong> <%= @product.quantity %></p>
+
+<% if @product.categories.any? %>
+  <p>
+    <strong>Categories:</strong>
+    <%= @product.categories.map(&:name).join(", ") %>
+  </p>
+<% end %>
