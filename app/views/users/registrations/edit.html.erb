@@ -26,9 +26,14 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  <div>
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name %>
+  </div>
+
+  <div>
+    <%= f.label :last_name %>
+    <%= f.text_field :last_name %>
   </div>
 
   <div>
@@ -50,6 +55,13 @@
     <%= f.label :province_id, "Province" %>
     <%= f.collection_select :province_id, Province.all, :id, :name, prompt: "Select Province" %>
   </div>
+
+  <div class="field">
+    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+
 
   <div class="actions">
     <%= f.submit "Update" %>
