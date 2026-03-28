@@ -21,6 +21,26 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
+  <div>
+    <%= f.label :address %>
+    <%= f.text_field :address %>
+  </div>
+
+  <div>
+    <%= f.label :city %>
+    <%= f.text_field :city %>
+  </div>
+
+  <div>
+    <%= f.label :postal_code %>
+    <%= f.text_field :postal_code %>
+  </div>
+
+  <div>
+    <%= f.label :province_id, "Province" %>
+    <%= f.collection_select :province_id, Province.all, :id, :name, prompt: "Select Province" %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Sign up" %>
   </div>
