@@ -14,7 +14,11 @@ class ProductsController < ApplicationController
     end
 
     if params[:keyword].present?
-      @products = @products.where("name LIKE ? OR description LIKE ?", "%#{params[:keyword]}%", "%#{params[:keyword]}%")
+      keyword = "%#{params[:keyword].strip}%"
+      @products = @products.where(
+        "products.name LIKE :keyword OR products.description LIKE :keyword",
+        keyword: keyword
+      )
     end
 
     if params[:category_id].present?
