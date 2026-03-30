@@ -23,4 +23,13 @@ class ApplicationController < ActionController::Base
       :first_name, :last_name, :address, :city, :postal_code, :province_id
     ])
   end
+
+before_action :set_cart_count
+
+  private
+
+  def set_cart_count
+    session[:cart] ||= {}
+    @cart_count = session[:cart].values.sum
+  end
 end
