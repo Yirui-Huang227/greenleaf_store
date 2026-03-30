@@ -10,12 +10,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-light">
     <%= render "shared/header" %>
     <%= render "shared/navbar" %>
-    <%= render "shared/flash" %>
 
-    <main class="container">
+    <main class="container py-4">
+      <%= render "shared/flash" %>
       <%= yield %>
     </main>
   </body>
