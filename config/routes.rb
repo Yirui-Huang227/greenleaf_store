@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'carts/show'
   get 'contact/show'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -19,4 +20,10 @@ Rails.application.routes.draw do
 
   get "about", to: "about#index"
   get "/contact", to: "contact#show"
+
+  resource :cart, only: [:show] do
+    post "add/:product_id", to: "carts#add", as: :add
+    patch "update/:product_id", to: "carts#update", as: :update
+    delete "remove/:product_id", to: "carts#remove", as: :remove
+  end
 end
