@@ -26,4 +26,8 @@ Rails.application.routes.draw do
     patch "update/:product_id", to: "carts#update", as: :update
     delete "remove/:product_id", to: "carts#remove", as: :remove
   end
+
+  resource :checkout, only: [:show, :create]
+  resources :orders, only: [:index, :show]
+  resource :cart, only: [:show]
 end
