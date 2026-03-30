@@ -1,2 +1,22 @@
-<h1>Checkouts#show</h1>
-<p>Find me in app/views/checkouts/show.html.erb</p>
+<h1>Checkout</h1>
+
+<h2>Shipping Address</h2>
+<p><%= current_user.first_name %> <%= current_user.last_name %></p>
+<p><%= current_user.address %></p>
+<p><%= current_user.city %>, <%= current_user.province.name %></p>
+<p><%= current_user.postal_code %></p>
+
+<h2>Order Summary</h2>
+
+<% @cart_items.each do |item| %>
+  <p>
+    <%= item[:product].name %> × <%= item[:quantity] %>
+    = <%= number_to_currency(item[:line_total]) %>
+  </p>
+<% end %>
+
+<p>Subtotal: <%= number_to_currency(@subtotal) %></p>
+<p>GST: <%= number_to_currency(@gst_amount) %> (<%= @gst_rate %>%)</p>
+<p>PST: <%= number_to_currency(@pst_amount) %> (<%= @pst_rate %>%)</p>
+<p>HST: <%= number_to_currency(@hst_amount) %> (<%= @hst_rate %>%)</p>
+<p><strong>Total: <%= number_to_currency(@total) %></strong></p>
