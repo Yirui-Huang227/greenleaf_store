@@ -1,2 +1,23 @@
-<h1>Orders#show</h1>
-<p>Find me in app/views/orders/show.html.erb</p>
+<h1>Order #<%= @order.id %></h1>
+
+<p>Status: <%= @order.status %></p>
+<p>Placed on: <%= @order.created_at.strftime("%B %d, %Y") %></p>
+
+<h2>Shipping Address</h2>
+<p><%= @order.order_address %></p>
+<p><%= @order.order_city %></p>
+<p><%= @order.order_postal_code %></p>
+
+<h2>Items</h2>
+<% @order.order_items.each do |item| %>
+  <p>
+    <%= item.product_name %> × <%= item.quantity %>
+    = <%= number_to_currency(item.line_total) %>
+  </p>
+<% end %>
+
+<p>Subtotal: <%= number_to_currency(@order.subtotal) %></p>
+<p>GST: <%= number_to_currency(@order.gst_amount) %></p>
+<p>PST: <%= number_to_currency(@order.pst_amount) %></p>
+<p>HST: <%= number_to_currency(@order.hst_amount) %></p>
+<p><strong>Total: <%= number_to_currency(@order.total) %></strong></p>
