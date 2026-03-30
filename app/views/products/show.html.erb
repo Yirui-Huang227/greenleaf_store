@@ -1,12 +1,57 @@
-<h1><%= @product.name %></h1>
+<div class="row g-4">
+  <div class="col-md-6">
+    <% if @product.image.attached? %>
+      <%= image_tag @product.image,
+          class: "img-fluid rounded shadow-sm w-100",
+          style: "max-height: 500px; object-fit: cover;" %>
+    <% else %>
+      <div class="bg-light rounded d-flex align-items-center justify-content-center shadow-sm"
+           style="height: 400px;">
+        <span class="text-muted">No Image Available</span>
+      </div>
+    <% end %>
+  </div>
 
-<p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
-<p><strong>Description:</strong> <%= @product.description %></p>
-<p><strong>Stock:</strong> <%= @product.quantity %></p>
+  <div class="col-md-6">
+    <h1 class="mb-3"><%= @product.name %></h1>
 
-<% if @product.categories.any? %>
-  <p>
-    <strong>Categories:</strong>
-    <%= @product.categories.map(&:name).join(", ") %>
-  </p>
-<% end %>
+    <% if @product.on_sale %>
+      <div class="mb-2">
+        <span class="badge bg-danger">On Sale</span>
+      </div>
+    <% end %>
+
+    <p class="fs-4 fw-bold text-success mb-3">
+      <%= number_to_currency(@product.price) %>
+    </p>
+
+    <% if @product.categories.any? %>
+      <div class="mb-3">
+        <% @product.categories.each do |category| %>
+          <span class="badge bg-light text-dark border me-1 mb-1">
+            <%= category.name %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <h5>Description</h5>
+      <p class="text-muted"><%= @product.description %></p>
+    </div>
+
+    <div class="mb-4">
+      <h6>Stock</h6>
+      <% if @product.quantity.to_i > 0 %>
+        <p class="text-success fw-semibold mb-0">In Stock: <%= @product.quantity %></p>
+      <% else %>
+        <p class="text-danger fw-semibold mb-0">Out of Stock</p>
+      <% end %>
+    </div>
+
+    <div class="d-grid gap-2 d-md-block">
+      <%= link_to "Back to Products", products_path, class: "btn btn-outline-secondary" %>
+      <%= button_to "Add to Cart", "#", method: :post, class: "btn btn-success" %>
+    </div>
+  </div>
+</div>
