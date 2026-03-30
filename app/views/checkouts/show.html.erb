@@ -8,12 +8,7 @@
 
 <h2>Order Summary</h2>
 
-<% @cart_items.each do |item| %>
-  <p>
-    <%= item[:product].name %> × <%= item[:quantity] %>
-    = <%= number_to_currency(item[:line_total]) %>
-  </p>
-<% end %>
+<%= render partial: "checkout_item", collection: @cart_items, as: :item %>
 
 <p>Subtotal: <%= number_to_currency(@subtotal) %></p>
 <p>GST: <%= number_to_currency(@gst_amount) %> (<%= @gst_rate %>%)</p>
