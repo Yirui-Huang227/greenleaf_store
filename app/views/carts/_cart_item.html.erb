@@ -1,0 +1,15 @@
+<div class="cart-item">
+  <h3><%= item[:product].name %></h3>
+  <p>Price: <%= number_to_currency(item[:product].price) %></p>
+
+  <%= form_with url: update_cart_path(item[:product]), method: :patch, local: true do %>
+    <%= label_tag :quantity, "Quantity" %>
+    <%= number_field_tag :quantity, item[:quantity], min: 0 %>
+    <%= submit_tag "Update" %>
+  <% end %>
+
+  <p>Subtotal: <%= number_to_currency(item[:subtotal]) %></p>
+
+  <%= button_to "Remove", remove_cart_path(item[:product]), method: :delete %>
+</div>
+<hr>
