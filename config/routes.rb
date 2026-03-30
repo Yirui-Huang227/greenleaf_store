@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'orders/index'
+  get 'orders/show'
+  get 'checkouts/show'
   get 'carts/show'
   get 'contact/show'
   devise_for :admin_users, ActiveAdmin::Devise.config
