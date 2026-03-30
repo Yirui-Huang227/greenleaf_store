@@ -18,6 +18,6 @@ class OrderItem < ApplicationRecord
                        numericality: { only_integer: true, greater_than: 0 }
 
   def line_total
-    price_at_purchase * quantity
+    price_at_purchase.to_f * quantity
   end
 end

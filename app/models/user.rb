@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   belongs_to :province, optional: true
-  has_many :orders
+  has_many :orders, dependent: :nullify
 
   # first_name / last_name (string)
   # validates :first_name,

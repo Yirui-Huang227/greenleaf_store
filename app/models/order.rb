@@ -28,4 +28,8 @@ class Order < ApplicationRecord
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   validates :stripe_payment_id, length: { maximum: 255 }, allow_blank: true
+
+  def tax_total
+    gst_amount.to_f + pst_amount.to_f + hst_amount.to_f
+  end
 end
