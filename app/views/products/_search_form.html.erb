@@ -1,24 +1,26 @@
-<%= form_with url: products_path, method: :get, local: true do %>
-  <div>
-    <%= label_tag :keyword, "Search" %>
-    <%= text_field_tag :keyword, params[:keyword] %>
+<%= form_with url: products_path, method: :get, local: true, class: "row g-3 align-items-end mb-4" do %>
+  <div class="col-md-4">
+    <%= label_tag :keyword, "Search", class: "form-label" %>
+    <%= text_field_tag :keyword, params[:keyword], class: "form-control", placeholder: "Search products" %>
   </div>
 
-  <div>
-    <%= label_tag :category_id, "Category" %>
+  <div class="col-md-3">
+    <%= label_tag :category_id, "Category", class: "form-label" %>
     <%= select_tag :category_id,
         options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
-        include_blank: "All Categories" %>
+        include_blank: "All Categories",
+        class: "form-select" %>
   </div>
 
-  <div>
-    <%= label_tag :filter, "Filter" %>
+  <div class="col-md-3">
+    <%= label_tag :filter, "Filter", class: "form-label" %>
     <%= select_tag :filter,
         options_for_select([["On Sale", "sale"], ["New", "new"], ["Recently Updated", "recent"]], params[:filter]),
-        include_blank: "All Products" %>
+        include_blank: "All Products",
+        class: "form-select" %>
   </div>
 
-  <div>
-    <%= submit_tag "Filter" %>
+  <div class="col-md-2 d-grid">
+    <%= submit_tag "Filter", class: "btn btn-success" %>
   </div>
 <% end %>
