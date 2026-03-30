@@ -1,8 +1,11 @@
-<div class="category-nav">
-  <h3>Browse Categories</h3>
-  <ul>
+<div class="mb-4">
+  <h5 class="mb-3">Browse Categories</h5>
+
+  <div class="d-flex flex-wrap gap-2">
     <% @categories.each do |category| %>
-      <li><%= link_to category.name, category_path(category) %></li>
+      <%= link_to category.name,
+          category_path(category),
+          class: "btn btn-outline-secondary btn-sm" %>
     <% end %>
-  </ul>
+  </div>
 </div>
