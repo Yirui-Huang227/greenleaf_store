@@ -51,7 +51,7 @@
 
     <div class="d-grid gap-2 d-md-block">
       <%= link_to "Back to Products", products_path, class: "btn btn-outline-secondary" %>
-      <%= button_to "Add to Cart", "#", method: :post, class: "btn btn-success" %>
+      <%= button_to "Add to Cart", add_cart_path(@product), method: :post, class: "btn btn-success" %>
     </div>
   </div>
 </div>
