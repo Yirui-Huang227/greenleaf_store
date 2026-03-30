@@ -15,3 +15,6 @@
 <p>PST: <%= number_to_currency(@pst_amount) %> (<%= @pst_rate %>%)</p>
 <p>HST: <%= number_to_currency(@hst_amount) %> (<%= @hst_rate %>%)</p>
 <p><strong>Total: <%= number_to_currency(@total) %></strong></p>
+<%= form_with url: checkout_path, method: :post, local: true do %>
+  <%= submit_tag "Place Order" %>
+<% end %>

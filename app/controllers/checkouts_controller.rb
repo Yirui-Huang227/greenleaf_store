@@ -7,6 +7,45 @@ class CheckoutsController < ApplicationController
     load_checkout_data
   end
 
+  def create
+    load_checkout_data
+
+    order = current_user.orders.build(
+      order_province_id: current_user.province_id,
+      order_address: current_user.address,
+      order_city: current_user.city,
+      order_postal_code: current_user.postal_code,
+      status: "placed",
+      subtotal: @subtotal,
+      gst_rate: @gst_rate,
+      pst_rate: @pst_rate,
+      hst_rate: @hst_rate,
+      gst_amount: @gst_amount,
+      pst_amount: @pst_amount,
+      hst_amount: @hst_amount,
+      total: @total
+    )
+
+    ActiveRecord::Base.transaction do
+      order.save!
+
+      @cart_items.each do |item|
+        order.order_items.create!(
+          product: item[:product],
+          product_name: item[:product].name,
+          price_at_purchase: item[:product].price,
+          quantity: item[:quantity]
+        )
+      end
+    end
+
+    session[:cart] = {}
+    redirect_to order_path(order), notice: "Order placed successfully."
+  rescue ActiveRecord::RecordInvalid
+    flash.now[:alert] = "Could not place order."
+    render :show, status: :unprocessable_entity
+  end
+
   private
 
   def load_checkout_data
@@ -24,7 +63,6 @@ class CheckoutsController < ApplicationController
     @subtotal = @cart_items.sum { |item| item[:line_total] }
 
     province = current_user.province
-
     @gst_rate = province.gst.to_f
     @pst_rate = province.pst.to_f
     @hst_rate = province.hst.to_f
