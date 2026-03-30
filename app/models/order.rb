@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :user
-  belongs_to :order_province, class_name: "Province", foreign_key: "order_province_id"
+  belongs_to :province, class_name: "Province", foreign_key: "order_province_id"
 
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items

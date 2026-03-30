@@ -7,3 +7,6 @@
 <% else %>
   <p>Your cart is empty.</p>
 <% end %>
+<%= form_with url: checkout_path, method: :post, local: true do %>
+  <%= submit_tag "Place Order" %>
+<% end %>

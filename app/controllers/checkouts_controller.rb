@@ -15,7 +15,7 @@ class CheckoutsController < ApplicationController
       order_address: current_user.address,
       order_city: current_user.city,
       order_postal_code: current_user.postal_code,
-      status: "placed",
+      status: "pending",
       subtotal: @subtotal,
       gst_rate: @gst_rate,
       pst_rate: @pst_rate,
@@ -41,8 +41,12 @@ class CheckoutsController < ApplicationController
 
     session[:cart] = {}
     redirect_to order_path(order), notice: "Order placed successfully."
-  rescue ActiveRecord::RecordInvalid
-    flash.now[:alert] = "Could not place order."
+
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.debug "CHECKOUT ERROR: #{e.record.class.name}"
+    Rails.logger.debug "CHECKOUT ERROR MESSAGES: #{e.record.errors.full_messages}"
+
+    flash.now[:alert] = e.record.errors.full_messages.join(", ")
     render :show, status: :unprocessable_entity
   end
 
@@ -67,9 +71,9 @@ class CheckoutsController < ApplicationController
     @pst_rate = province.pst.to_f
     @hst_rate = province.hst.to_f
 
-    @gst_amount = @subtotal * (@gst_rate / 100)
-    @pst_amount = @subtotal * (@pst_rate / 100)
-    @hst_amount = @subtotal * (@hst_rate / 100)
+    @gst_amount = @subtotal * @gst_rate
+    @pst_amount = @subtotal * @pst_rate
+    @hst_amount = @subtotal * @hst_rate
 
     @total = @subtotal + @gst_amount + @pst_amount + @hst_amount
   end
