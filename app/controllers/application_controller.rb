@@ -1,13 +1,16 @@
 class ApplicationController < ActionController::Base
-  before_action :load_categories
+  before_action :load_nav_categories, unless: :admin_namespace?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
 
-  def load_categories
-    @categories = Category.order(:name)
+  def load_nav_categories
+    @nav_categories = Category.order(:name)
   end
 
-  before_action :configure_permitted_parameters, if: :devise_controller?
+  def admin_namespace?
+    params[:controller].start_with?("admin/")
+  end
 
   protected
 
