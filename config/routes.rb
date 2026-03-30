@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'contact/show'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users
@@ -17,4 +18,5 @@ Rails.application.routes.draw do
   resources :categories, only: [:show]
 
   get "about", to: "about#index"
+  get "/contact", to: "contact#show"
 end

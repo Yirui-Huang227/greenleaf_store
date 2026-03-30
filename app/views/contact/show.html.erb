@@ -1,0 +1,7 @@
+<h1>Contact Us</h1>
+
+<% if @about_page.present? %>
+  <p><%= simple_format(@about_page.contact) %></p>
+<% else %>
+  <p>Contact page content is not available yet.</p>
+<% end %>

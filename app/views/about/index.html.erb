@@ -1,6 +1,8 @@
-<h1><%= @about_page.title %></h1>
+<h1>About Us</h1>
 
-<p><%= @about_page.about %></p>
-
-<h2>Contact</h2>
-<p><%= @about_page.contact %></p>
+<% if @about_page.present? %>
+  <h2><%= @about_page.title %></h2>
+  <p><%= simple_format(@about_page.about) %></p>
+<% else %>
+  <p>About page content is not available yet.</p>
+<% end %>

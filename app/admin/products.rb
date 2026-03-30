@@ -29,6 +29,9 @@ ActiveAdmin.register Product do
         image_tag url_for(product.image), width: 80
       end
     end
+    column :created_at
+    column :updated_at
+
     actions
   end
 
