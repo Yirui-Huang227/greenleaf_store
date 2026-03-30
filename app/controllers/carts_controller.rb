@@ -3,6 +3,7 @@ class CartsController < ApplicationController
 
   def show
     @cart_items = load_cart_items
+    @cart_total = @cart_items.sum { |item| item[:subtotal] }
   end
 
   def add
