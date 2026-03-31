@@ -86,4 +86,20 @@ class PaymentsController < ApplicationController
 
     tax_items
   end
+
+  def success
+    @order = current_user.orders.find(params[:order_id])
+
+    if params[:session_id].present?
+      stripe_session = Stripe::Checkout::Session.retrieve(params[:session_id])
+
+      if stripe_session.payment_status == "paid"
+        @order.update!(
+          status: "paid",
+          payment_intent_id: stripe_session.payment_intent,
+          paid_at: Time.current
+        )
+      end
+    end
+  end
 end
