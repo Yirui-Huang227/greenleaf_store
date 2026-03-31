@@ -22,3 +22,9 @@
 <p>PST: <%= number_to_currency(@order.pst_amount) %></p>
 <p>HST: <%= number_to_currency(@order.hst_amount) %></p>
 <p><strong>Total: <%= number_to_currency(@order.total) %></strong></p>
+<% if @order.status == "pending" %>
+  <%= button_to "Pay Now",
+      create_checkout_session_payments_path(order_id: @order.id),
+      method: :post,
+      class: "btn btn-primary" %>
+<% end %>
