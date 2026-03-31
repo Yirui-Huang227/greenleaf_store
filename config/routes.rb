@@ -33,4 +33,14 @@ Rails.application.routes.draw do
   resource :checkout, only: [:show, :create]
   resources :orders, only: [:index, :show]
   resource :cart, only: [:show]
+
+  resources :orders, only: [:index, :show]
+
+  resources :payments, only: [] do
+    collection do
+      post :create_checkout_session
+      get :success
+      get :cancel
+    end
+  end
 end
