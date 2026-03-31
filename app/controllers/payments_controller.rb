@@ -99,6 +99,8 @@ class PaymentsController < ApplicationController
           payment_intent_id: stripe_session.payment_intent,
           paid_at: Time.current
         )
+
+        session[:cart] = {}
       end
     end
   end
