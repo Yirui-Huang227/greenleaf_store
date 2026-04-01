@@ -1,15 +1,36 @@
-<div class="cart-item">
-  <h3><%= item[:product].name %></h3>
-  <p>Price: <%= number_to_currency(item[:product].price) %></p>
+<div class="card shadow-sm border-0 mb-3">
+  <div class="card-body">
+    <div class="row align-items-center g-3">
+      <div class="col-md-5">
+        <h5 class="mb-1"><%= item[:product].name %></h5>
+        <p class="text-muted mb-0">
+          Price: <%= number_to_currency(item[:product].price) %>
+        </p>
+      </div>
 
-  <%= form_with url: update_cart_path(item[:product]), method: :patch, local: true do %>
-    <%= label_tag :quantity, "Quantity" %>
-    <%= number_field_tag :quantity, item[:quantity], min: 0 %>
-    <%= submit_tag "Update" %>
-  <% end %>
+      <div class="col-md-3">
+        <%= form_with url: update_cart_path(item[:product]), method: :patch, local: true do %>
+          <%= label_tag :quantity, "Quantity", class: "form-label" %>
+          <div class="input-group">
+            <%= number_field_tag :quantity, item[:quantity], min: 0, class: "form-control" %>
+            <%= submit_tag "Update", class: "btn btn-outline-secondary" %>
+          </div>
+        <% end %>
+      </div>
 
-  <p>Subtotal: <%= number_to_currency(item[:subtotal]) %></p>
+      <div class="col-md-2">
+        <p class="mb-0 fw-bold text-success">
+          <%= number_to_currency(item[:subtotal]) %>
+        </p>
+        <small class="text-muted">Subtotal</small>
+      </div>
 
-  <%= button_to "Remove", remove_cart_path(item[:product]), method: :delete %>
+      <div class="col-md-2 text-md-end">
+        <%= button_to "Remove",
+            remove_cart_path(item[:product]),
+            method: :delete,
+            class: "btn btn-outline-danger w-100" %>
+      </div>
+    </div>
+  </div>
 </div>
-<hr>
