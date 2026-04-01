@@ -1,11 +1,51 @@
-<h1>Payment Successful</h1>
-<p>Your payment was completed successfully.</p>
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm border-0 text-center">
+      <div class="card-body p-5">
 
-<% if @order.present? %>
-  <p>
-    <%= link_to "View Order", order_path(@order), class: "btn btn-primary" %>
-  </p>
-<% else %>
-  <p>Order could not be loaded.</p>
-  <p>order_id: <%= params[:order_id] %></p>
-<% end %>
+        <div class="mb-4">
+          <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+               style="width: 80px; height: 80px; font-size: 2rem;">
+            ✓
+          </div>
+        </div>
+
+        <h2 class="mb-3">Payment Successful</h2>
+
+        <p class="text-muted mb-4">
+          Thank you! Your payment was completed successfully.
+        </p>
+
+        <% if @order.present? %>
+
+          <div class="mb-4">
+            <p class="mb-1"><strong>Order ID:</strong></p>
+            <p class="fs-5"><%= @order.id %></p>
+          </div>
+
+          <div class="d-grid gap-2">
+            <%= link_to "View Order",
+                order_path(@order),
+                class: "btn btn-success" %>
+
+            <%= link_to "Continue Shopping",
+                products_path,
+                class: "btn btn-outline-secondary" %>
+          </div>
+
+        <% else %>
+
+          <div class="alert alert-warning">
+            Order could not be loaded.
+          </div>
+
+          <p class="small text-muted">
+            order_id: <%= params[:order_id] %>
+          </p>
+
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
