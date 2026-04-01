@@ -1,6 +1,21 @@
 <h1>Payment Cancelled</h1>
-<p>Your payment was cancelled. Your order is still saved and can be paid later.</p>
+<p>Your payment was not completed. Your order is still saved.</p>
 
-<p>
-  <%= link_to "Back to Order", order_path(@order), class: "btn btn-secondary" %>
-</p>
+<% if @order.present? %>
+  <p>
+    <%= link_to "Back to Order", order_path(@order), class: "btn btn-secondary" %>
+  </p>
+
+  <% if @order.status == "pending" %>
+    <%= button_to "Try Payment Again",
+        create_checkout_session_payments_path(order_id: @order.id),
+        method: :post,
+        form: { data: { turbo: false } },
+        class: "btn btn-primary" %>
+  <% end %>
+<% else %>
+  <p>Order could not be loaded.</p>
+  <p>
+    <%= link_to "My Orders", orders_path, class: "btn btn-secondary" %>
+  </p>
+<% end %>

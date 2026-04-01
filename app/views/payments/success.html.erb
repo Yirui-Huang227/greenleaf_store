@@ -1,6 +1,11 @@
 <h1>Payment Successful</h1>
 <p>Your payment was completed successfully.</p>
 
-<p>
-  <%= link_to "View Order", order_path(@order), class: "btn btn-primary" %>
-</p>
+<% if @order.present? %>
+  <p>
+    <%= link_to "View Order", order_path(@order), class: "btn btn-primary" %>
+  </p>
+<% else %>
+  <p>Order could not be loaded.</p>
+  <p>order_id: <%= params[:order_id] %></p>
+<% end %>

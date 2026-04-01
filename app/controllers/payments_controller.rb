@@ -8,21 +8,48 @@ class PaymentsController < ApplicationController
       payment_method_types: ["card"],
       mode: "payment",
       line_items: build_line_items(order),
-      success_url: payments_success_url(order_id: order.id, session_id: "{CHECKOUT_SESSION_ID}"),
-      cancel_url: payments_cancel_url(order_id: order.id)
+      success_url: "http://127.0.0.1:3000/payments/success?order_id=#{order.id}&session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "http://127.0.0.1:3000/payments/cancel?order_id=#{order.id}"
     )
 
-    order.update!(stripe_session_id: session.id)
+    order.update!(stripe_payment_id: session.id)
 
     redirect_to session.url, allow_other_host: true
   end
 
   def success
-    @order = current_user.orders.find(params[:order_id])
+    @order = current_user.orders.find_by(id: params[:order_id])
+
+    if @order.nil?
+      render plain: "Order not found for id=#{params[:order_id]}", status: :not_found
+      return
+    end
+
+    if params[:session_id].present?
+      stripe_session = Stripe::Checkout::Session.retrieve(params[:session_id])
+
+      Rails.logger.debug "=== STRIPE SESSION ID: #{stripe_session.id} ==="
+      Rails.logger.debug "=== STRIPE PAYMENT STATUS: #{stripe_session.payment_status} ==="
+      Rails.logger.debug "=== STRIPE PAYMENT INTENT: #{stripe_session.payment_intent} ==="
+
+      if stripe_session.payment_status == "paid" && @order.status != "paid"
+        @order.update!(
+          status: "paid",
+          stripe_payment_id: stripe_session.payment_intent
+        )
+        session[:cart] = {}
+        @order.reload
+      end
+    end
   end
 
   def cancel
-    @order = current_user.orders.find(params[:order_id])
+    @order = current_user.orders.find_by(id: params[:order_id])
+
+    if @order.nil?
+      redirect_to orders_path, alert: "Order not found."
+      return
+    end
   end
 
   private
@@ -87,21 +114,4 @@ class PaymentsController < ApplicationController
     tax_items
   end
 
-  def success
-    @order = current_user.orders.find(params[:order_id])
-
-    if params[:session_id].present?
-      stripe_session = Stripe::Checkout::Session.retrieve(params[:session_id])
-
-      if stripe_session.payment_status == "paid"
-        @order.update!(
-          status: "paid",
-          payment_intent_id: stripe_session.payment_intent,
-          paid_at: Time.current
-        )
-
-        session[:cart] = {}
-      end
-    end
-  end
 end

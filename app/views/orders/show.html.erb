@@ -26,5 +26,6 @@
   <%= button_to "Pay Now",
       create_checkout_session_payments_path(order_id: @order.id),
       method: :post,
+      form: { data: { turbo: false } },
       class: "btn btn-primary" %>
 <% end %>
