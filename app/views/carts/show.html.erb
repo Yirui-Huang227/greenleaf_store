@@ -1,12 +1,50 @@
-<h1>My Cart</h1>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
 
-<% if @cart_items.any? %>
-  <%= render partial: "cart_item", collection: @cart_items, as: :item %>
+    <h2 class="mb-4">My Cart</h2>
 
-  <p><strong>Total: <%= number_to_currency(@cart_total) %></strong></p>
-<% else %>
-  <p>Your cart is empty.</p>
-<% end %>
-<%= form_with url: checkout_path, method: :post, local: true do %>
-  <%= submit_tag "Place Order" %>
-<% end %>
+    <% if @cart_items.any? %>
+
+      <!-- Cart Items -->
+      <%= render partial: "cart_item", collection: @cart_items, as: :item %>
+
+      <!-- Summary Card -->
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between mb-3">
+            <h5 class="mb-0">Total</h5>
+            <h5 class="mb-0 text-success">
+              <%= number_to_currency(@cart_total) %>
+            </h5>
+          </div>
+
+          <!-- Checkout Button -->
+          <div class="d-grid gap-2">
+            <%= form_with url: checkout_path, method: :post, local: true do %>
+              <%= submit_tag "Proceed to Checkout", class: "btn btn-success" %>
+            <% end %>
+
+            <%= link_to "Continue Shopping",
+                products_path,
+                class: "btn btn-outline-secondary" %>
+          </div>
+
+        </div>
+      </div>
+
+    <% else %>
+
+      <!-- Empty State -->
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center py-5">
+          <h5 class="mb-3">Your cart is empty</h5>
+          <p class="text-muted mb-4">Browse products and add items to your cart.</p>
+          <%= link_to "Browse Products", products_path, class: "btn btn-success" %>
+        </div>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
