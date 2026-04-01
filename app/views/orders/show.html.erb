@@ -1,31 +1,112 @@
-<h1>Order #<%= @order.id %></h1>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
 
-<p>Status: <%= @order.status %></p>
-<p>Placed on: <%= @order.created_at.strftime("%B %d, %Y") %></p>
+    <!-- Order Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Order #<%= @order.id %></h2>
+      <span class="badge bg-<%= @order.status == "paid" ? "success" : "warning" %>">
+        <%= @order.status.capitalize %>
+      </span>
+    </div>
 
-<h2>Shipping Address</h2>
-<p><%= @order.order_address %></p>
-<p><%= @order.order_city %>, <%= @order.province&.name || "N/A" %></p>
-<p><%= @order.order_postal_code %></p>
+    <!-- Order Info -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <p class="mb-1"><strong>Placed on:</strong> <%= @order.created_at.strftime("%B %d, %Y") %></p>
+      </div>
+    </div>
 
+    <!-- Shipping Address -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h5 class="mb-3">Shipping Address</h5>
+        <p class="mb-1"><%= @order.order_address %></p>
+        <p class="mb-1"><%= @order.order_city %>, <%= @order.province&.name || "N/A" %></p>
+        <p class="mb-0"><%= @order.order_postal_code %></p>
+      </div>
+    </div>
 
-<h2>Items</h2>
-<% @order.order_items.each do |item| %>
-  <p>
-    <%= item.product_name %> × <%= item.quantity %>
-    = <%= number_to_currency(item.line_total) %>
-  </p>
-<% end %>
+    <!-- Items Table -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h5 class="mb-3">Items</h5>
 
-<p>Subtotal: <%= number_to_currency(@order.subtotal) %></p>
-<p>GST: <%= number_to_currency(@order.gst_amount) %></p>
-<p>PST: <%= number_to_currency(@order.pst_amount) %></p>
-<p>HST: <%= number_to_currency(@order.hst_amount) %></p>
-<p><strong>Total: <%= number_to_currency(@order.total) %></strong></p>
-<% if @order.status == "pending" %>
-  <%= button_to "Pay Now",
-      create_checkout_session_payments_path(order_id: @order.id),
-      method: :post,
-      form: { data: { turbo: false } },
-      class: "btn btn-primary" %>
-<% end %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th class="text-end">Price</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @order.order_items.each do |item| %>
+              <tr>
+                <td><%= item.product_name %></td>
+                <td><%= item.quantity %></td>
+                <td class="text-end"><%= number_to_currency(item.price_at_purchase) %></td>
+                <td class="text-end"><%= number_to_currency(item.line_total) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <!-- Totals -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between">
+          <span>Subtotal</span>
+          <span><%= number_to_currency(@order.subtotal) %></span>
+        </div>
+
+        <% if @order.gst_amount.to_f > 0 %>
+          <div class="d-flex justify-content-between">
+            <span>GST</span>
+            <span><%= number_to_currency(@order.gst_amount) %></span>
+          </div>
+        <% end %>
+
+        <% if @order.pst_amount.to_f > 0 %>
+          <div class="d-flex justify-content-between">
+            <span>PST</span>
+            <span><%= number_to_currency(@order.pst_amount) %></span>
+          </div>
+        <% end %>
+
+        <% if @order.hst_amount.to_f > 0 %>
+          <div class="d-flex justify-content-between">
+            <span>HST</span>
+            <span><%= number_to_currency(@order.hst_amount) %></span>
+          </div>
+        <% end %>
+
+        <hr>
+
+        <div class="d-flex justify-content-between fw-bold fs-5">
+          <span>Total</span>
+          <span><%= number_to_currency(@order.total) %></span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-grid gap-2">
+      <% if @order.status == "pending" %>
+        <%= button_to "Pay Now",
+            create_checkout_session_payments_path(order_id: @order.id),
+            method: :post,
+            form: { data: { turbo: false } },
+            class: "btn btn-success" %>
+      <% end %>
+
+      <%= link_to "Back to Orders", orders_path, class: "btn btn-outline-secondary" %>
+    </div>
+
+  </div>
+</div>
