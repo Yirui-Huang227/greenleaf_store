@@ -1,13 +1,44 @@
-<h1>My Orders</h1>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h2 class="mb-4">My Orders</h2>
 
-<% if @orders.any? %>
-  <% @orders.each do |order| %>
-    <p>
-      <%= link_to "Order ##{order.id}", order_path(order) %>
-      - <%= number_to_currency(order.total) %>
-      - <%= order.created_at.strftime("%B %d, %Y") %>
-    </p>
-  <% end %>
-<% else %>
-  <p>You have no orders yet.</p>
-<% end %>
+    <% if @orders.any? %>
+      <div class="d-grid gap-3">
+        <% @orders.each do |order| %>
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                  <h5 class="mb-1">
+                    <%= link_to "Order ##{order.id}", order_path(order), class: "text-decoration-none text-dark" %>
+                  </h5>
+                  <p class="mb-1 text-muted">
+                    Placed on <%= order.created_at.strftime("%B %d, %Y") %>
+                  </p>
+                  <span class="badge bg-<%= order.status == "paid" ? "success" : "warning" %>">
+                    <%= order.status.capitalize %>
+                  </span>
+                </div>
+
+                <div class="text-md-end">
+                  <p class="mb-2 fw-bold text-success">
+                    <%= number_to_currency(order.total) %>
+                  </p>
+                  <%= link_to "View Order", order_path(order), class: "btn btn-outline-secondary btn-sm" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center py-5">
+          <h5 class="mb-3">You have no orders yet.</h5>
+          <p class="text-muted mb-4">Start shopping to place your first order.</p>
+          <%= link_to "Browse Products", products_path, class: "btn btn-success" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
