@@ -1,21 +1,55 @@
-<h1>Payment Cancelled</h1>
-<p>Your payment was not completed. Your order is still saved.</p>
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm border-0 text-center">
+      <div class="card-body p-5">
 
-<% if @order.present? %>
-  <p>
-    <%= link_to "Back to Order", order_path(@order), class: "btn btn-secondary" %>
-  </p>
+        <div class="mb-4">
+          <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center"
+               style="width: 80px; height: 80px; font-size: 2rem;">
+            !
+          </div>
+        </div>
 
-  <% if @order.status == "pending" %>
-    <%= button_to "Try Payment Again",
-        create_checkout_session_payments_path(order_id: @order.id),
-        method: :post,
-        form: { data: { turbo: false } },
-        class: "btn btn-primary" %>
-  <% end %>
-<% else %>
-  <p>Order could not be loaded.</p>
-  <p>
-    <%= link_to "My Orders", orders_path, class: "btn btn-secondary" %>
-  </p>
-<% end %>
+        <h2 class="mb-3">Payment Cancelled</h2>
+
+        <p class="text-muted mb-4">
+          Your payment was not completed. Your order is still saved, and you can try again.
+        </p>
+
+        <% if @order.present? %>
+          <div class="mb-4">
+            <p class="mb-1"><strong>Order ID:</strong></p>
+            <p class="fs-5"><%= @order.id %></p>
+          </div>
+
+          <div class="d-grid gap-2">
+            <%= link_to "Back to Order",
+                order_path(@order),
+                class: "btn btn-outline-secondary" %>
+
+            <% if @order.status == "pending" %>
+              <%= button_to "Try Payment Again",
+                  create_checkout_session_payments_path(order_id: @order.id),
+                  method: :post,
+                  form: { data: { turbo: false } },
+                  class: "btn btn-primary" %>
+            <% end %>
+
+            <%= link_to "Continue Shopping",
+                products_path,
+                class: "btn btn-outline-success" %>
+          </div>
+        <% else %>
+          <div class="alert alert-warning">
+            Order could not be loaded.
+          </div>
+
+          <div class="d-grid">
+            <%= link_to "My Orders", orders_path, class: "btn btn-outline-secondary" %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
