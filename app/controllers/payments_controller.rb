@@ -6,10 +6,10 @@ class PaymentsController < ApplicationController
 
     session = Stripe::Checkout::Session.create(
       payment_method_types: ["card"],
-      mode: "payment",
-      line_items: build_line_items(order),
-      success_url: "http://127.0.0.1:3000/payments/success?order_id=#{order.id}&session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://127.0.0.1:3000/payments/cancel?order_id=#{order.id}"
+      mode:                 "payment",
+      line_items:           build_line_items(order),
+      success_url:          "http://127.0.0.1:3000/payments/success?order_id=#{order.id}&session_id={CHECKOUT_SESSION_ID}",
+      cancel_url:           "http://127.0.0.1:3000/payments/cancel?order_id=#{order.id}"
     )
 
     order.update!(stripe_payment_id: session.id)
@@ -25,31 +25,31 @@ class PaymentsController < ApplicationController
       return
     end
 
-    if params[:session_id].present?
-      stripe_session = Stripe::Checkout::Session.retrieve(params[:session_id])
+    return if params[:session_id].blank?
 
-      Rails.logger.debug "=== STRIPE SESSION ID: #{stripe_session.id} ==="
-      Rails.logger.debug "=== STRIPE PAYMENT STATUS: #{stripe_session.payment_status} ==="
-      Rails.logger.debug "=== STRIPE PAYMENT INTENT: #{stripe_session.payment_intent} ==="
+    stripe_session = Stripe::Checkout::Session.retrieve(params[:session_id])
 
-      if stripe_session.payment_status == "paid" && @order.status != "paid"
-        @order.update!(
-          status: "paid",
-          stripe_payment_id: stripe_session.payment_intent
-        )
-        session[:cart] = {}
-        @order.reload
-      end
-    end
+    Rails.logger.debug "=== STRIPE SESSION ID: #{stripe_session.id} ==="
+    Rails.logger.debug "=== STRIPE PAYMENT STATUS: #{stripe_session.payment_status} ==="
+    Rails.logger.debug "=== STRIPE PAYMENT INTENT: #{stripe_session.payment_intent} ==="
+
+    return unless stripe_session.payment_status == "paid" && @order.status != "paid"
+
+    @order.update!(
+      status:            "paid",
+      stripe_payment_id: stripe_session.payment_intent
+    )
+    session[:cart] = {}
+    @order.reload
   end
 
   def cancel
     @order = current_user.orders.find_by(id: params[:order_id])
 
-    if @order.nil?
-      redirect_to orders_path, alert: "Order not found."
-      return
-    end
+    return unless @order.nil?
+
+    redirect_to orders_path, alert: "Order not found."
+    nil
   end
 
   private
@@ -57,10 +57,10 @@ class PaymentsController < ApplicationController
   def build_line_items(order)
     order.order_items.map do |item|
       {
-        quantity: item.quantity,
+        quantity:   item.quantity,
         price_data: {
-          currency: "cad",
-          unit_amount: (item.price_at_purchase * 100).to_i,
+          currency:     "cad",
+          unit_amount:  (item.price_at_purchase * 100).to_i,
           product_data: {
             name: item.product_name
           }
@@ -72,12 +72,12 @@ class PaymentsController < ApplicationController
   def tax_line_items(order)
     tax_items = []
 
-    if order.gst_amount.to_f > 0
+    if order.gst_amount.to_f.positive?
       tax_items << {
-        quantity: 1,
+        quantity:   1,
         price_data: {
-          currency: "cad",
-          unit_amount: (order.gst_amount * 100).to_i,
+          currency:     "cad",
+          unit_amount:  (order.gst_amount * 100).to_i,
           product_data: {
             name: "GST"
           }
@@ -85,12 +85,12 @@ class PaymentsController < ApplicationController
       }
     end
 
-    if order.pst_amount.to_f > 0
+    if order.pst_amount.to_f.positive?
       tax_items << {
-        quantity: 1,
+        quantity:   1,
         price_data: {
-          currency: "cad",
-          unit_amount: (order.pst_amount * 100).to_i,
+          currency:     "cad",
+          unit_amount:  (order.pst_amount * 100).to_i,
           product_data: {
             name: "PST"
           }
@@ -98,12 +98,12 @@ class PaymentsController < ApplicationController
       }
     end
 
-    if order.hst_amount.to_f > 0
+    if order.hst_amount.to_f.positive?
       tax_items << {
-        quantity: 1,
+        quantity:   1,
         price_data: {
-          currency: "cad",
-          unit_amount: (order.hst_amount * 100).to_i,
+          currency:     "cad",
+          unit_amount:  (order.hst_amount * 100).to_i,
           product_data: {
             name: "HST"
           }
@@ -113,5 +113,4 @@ class PaymentsController < ApplicationController
 
     tax_items
   end
-
 end

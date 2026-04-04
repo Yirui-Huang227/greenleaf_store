@@ -4,11 +4,11 @@ class Category < ApplicationRecord
 
   # name (string)
   validates :name, presence: true,
-                   length: { minimum: 2, maximum: 100 }
+                   length:   { minimum: 2, maximum: 100 }
 
   # description (text)
   validates :description, presence: true,
-                          length: { minimum: 5 }
+                          length:   { minimum: 5 }
 
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "description", "id", "name", "updated_at"]

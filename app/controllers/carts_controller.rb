@@ -18,7 +18,7 @@ class CartsController < ApplicationController
     product_id = params[:product_id].to_s
     quantity = params[:quantity].to_i
 
-    if quantity > 0
+    if quantity.positive?
       session[:cart][product_id] = quantity
     else
       session[:cart].delete(product_id)
@@ -49,7 +49,7 @@ class CartsController < ApplicationController
       next unless product
 
       {
-        product: product,
+        product:  product,
         quantity: quantity,
         subtotal: product.price * quantity
       }

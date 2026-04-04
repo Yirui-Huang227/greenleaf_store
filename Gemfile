@@ -74,3 +74,5 @@ gem 'kaminari'
 gem 'faker'
 gem 'stripe'
 gem "cssbundling-rails", "~> 1.4"
+gem 'rubocop'
+gem 'rubocop-rails'

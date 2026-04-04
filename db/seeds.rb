@@ -8,8 +8,6 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-
-
 require "csv"
 require "faker"
 
@@ -19,19 +17,22 @@ Categorization.destroy_all
 Product.destroy_all
 Category.destroy_all
 
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+if Rails.env.development?
+  AdminUser.create!(email: "admin@example.com", password: "password",
+                    password_confirmation: "password")
+end
 
 puts "Seeding categories and products from CSV..."
 
-csv_file = Rails.root.join("db", "products.csv")
+csv_file = Rails.root.join("db/products.csv")
 
 CSV.foreach(csv_file, headers: true) do |row|
   product = Product.create!(
-    name: row["name"],
+    name:        row["name"],
     description: row["description"],
-    price: row["price"],
-    on_sale: Faker::Boolean.boolean(true_ratio: 0.3),
-    quantity: Faker::Number.between(from: 5, to: 50)
+    price:       row["price"],
+    on_sale:     Faker::Boolean.boolean(true_ratio: 0.3),
+    quantity:    Faker::Number.between(from: 5, to: 50)
   )
 
   category_names = row["category_names"].to_s.split("|").map(&:strip).uniq
@@ -42,7 +43,7 @@ CSV.foreach(csv_file, headers: true) do |row|
     end
 
     Categorization.find_or_create_by!(
-      product: product,
+      product:  product,
       category: category
     )
   end

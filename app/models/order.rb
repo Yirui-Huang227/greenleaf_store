@@ -18,9 +18,12 @@ class Order < ApplicationRecord
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   validates :subtotal, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :gst_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
-  validates :pst_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
-  validates :hst_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
+  validates :gst_rate, presence:     true,
+                       numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
+  validates :pst_rate, presence:     true,
+                       numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
+  validates :hst_rate, presence:     true,
+                       numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
 
   validates :gst_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :pst_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
@@ -34,7 +37,11 @@ class Order < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "gst_amount", "gst_rate", "hst_amount", "hst_rate", "id", "id_value", "order_address", "order_city", "order_postal_code", "order_province_id", "pst_amount", "pst_rate", "status", "stripe_payment_id", "subtotal", "total", "updated_at", "user_id"]
+    ["created_at", "gst_amount", "gst_rate", "hst_amount",
+     "hst_rate", "id", "id_value", "order_address", "order_city",
+     "order_postal_code", "order_province_id", "pst_amount", "pst_rate",
+     "status", "stripe_payment_id", "subtotal", "total",
+     "updated_at", "user_id"]
   end
 
   def self.ransackable_associations(auth_object = nil)

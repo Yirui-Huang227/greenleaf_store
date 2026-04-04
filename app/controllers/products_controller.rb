@@ -14,7 +14,7 @@ class ProductsController < ApplicationController
         @page_title = "New Products"
       when "recent"
         @products = @products.where("products.updated_at >= ?", 3.days.ago)
-                            .where("products.created_at < ?", 3.days.ago)
+                             .where("products.created_at < ?", 3.days.ago)
         @page_title = "Recently Updated Products"
       else
         @page_title = "All Products"

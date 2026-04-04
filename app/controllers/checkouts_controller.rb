@@ -12,18 +12,18 @@ class CheckoutsController < ApplicationController
 
     order = current_user.orders.build(
       order_province_id: current_user.province_id,
-      order_address: current_user.address,
-      order_city: current_user.city,
+      order_address:     current_user.address,
+      order_city:        current_user.city,
       order_postal_code: current_user.postal_code,
-      status: "pending",
-      subtotal: @subtotal,
-      gst_rate: @gst_rate,
-      pst_rate: @pst_rate,
-      hst_rate: @hst_rate,
-      gst_amount: @gst_amount,
-      pst_amount: @pst_amount,
-      hst_amount: @hst_amount,
-      total: @total
+      status:            "pending",
+      subtotal:          @subtotal,
+      gst_rate:          @gst_rate,
+      pst_rate:          @pst_rate,
+      hst_rate:          @hst_rate,
+      gst_amount:        @gst_amount,
+      pst_amount:        @pst_amount,
+      hst_amount:        @hst_amount,
+      total:             @total
     )
 
     ActiveRecord::Base.transaction do
@@ -31,17 +31,16 @@ class CheckoutsController < ApplicationController
 
       @cart_items.each do |item|
         order.order_items.create!(
-          product: item[:product],
-          product_name: item[:product].name,
+          product:           item[:product],
+          product_name:      item[:product].name,
           price_at_purchase: item[:product].price,
-          quantity: item[:quantity]
+          quantity:          item[:quantity]
         )
       end
     end
 
     session[:cart] = {}
     redirect_to order_path(order), notice: "Order placed successfully."
-
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.debug "CHECKOUT ERROR: #{e.record.class.name}"
     Rails.logger.debug "CHECKOUT ERROR MESSAGES: #{e.record.errors.full_messages}"
@@ -58,8 +57,8 @@ class CheckoutsController < ApplicationController
     @cart_items = Product.where(id: @cart.keys).map do |product|
       quantity = @cart[product.id.to_s].to_i
       {
-        product: product,
-        quantity: quantity,
+        product:    product,
+        quantity:   quantity,
         line_total: product.price.to_f * quantity
       }
     end
@@ -83,8 +82,12 @@ class CheckoutsController < ApplicationController
   end
 
   def ensure_user_has_address
-    if current_user.address.blank? || current_user.city.blank? || current_user.postal_code.blank? || current_user.province.blank?
-      redirect_to edit_user_registration_path, alert: "Please complete your address before checkout."
+    if current_user.address.blank? ||
+       current_user.city.blank? ||
+       current_user.postal_code.blank? ||
+       current_user.province.blank?
+      redirect_to edit_user_registration_path,
+                  alert: "Please complete your address before checkout."
     end
   end
 end
