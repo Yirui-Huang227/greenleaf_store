@@ -1,7 +1,30 @@
-<h1>Contact Us</h1>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
 
-<% if @about_page.present? %>
-  <p><%= simple_format(@about_page.contact) %></p>
-<% else %>
-  <p>Contact page content is not available yet.</p>
-<% end %>
+    <h2 class="mb-4 text-center">Contact Us</h2>
+
+    <% if @about_page.present? %>
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+          <div class="text-muted">
+            <%= simple_format(@about_page.contact) %>
+          </div>
+
+        </div>
+      </div>
+
+    <% else %>
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center py-5">
+          <h5 class="mb-3">Contact information is not available yet</h5>
+          <p class="text-muted">Please check back later.</p>
+        </div>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
