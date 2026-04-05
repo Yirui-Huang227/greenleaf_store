@@ -6,7 +6,7 @@ class OrderMailer < ApplicationMailer
     @user = order.user
 
     mail(
-      to: @user.email,
+      to:      @user.email,
       subject: "Your Greenleaf Store order confirmation ##{@order.id}"
     )
   end
