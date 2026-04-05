@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+rm -f /rails/tmp/pids/server.pid
+
+echo "Running database prepare..."
+bundle exec rails db:prepare
+
+echo "Starting Rails server in development mode..."
+exec bundle exec rails server -b 0.0.0.0 -p 3000

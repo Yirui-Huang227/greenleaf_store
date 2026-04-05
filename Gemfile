@@ -76,3 +76,5 @@ gem 'stripe'
 gem "cssbundling-rails", "~> 1.4"
 gem 'rubocop'
 gem 'rubocop-rails'
+gem "aws-sdk-s3", require: false
+gem 'dotenv-rails'

@@ -76,4 +76,18 @@ Rails.application.configure do
 
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+
+  config.action_mailer.smtp_settings = {
+    authentication: :plain,
+    address: "smtp.mailgun.org",
+    port: 587,
+    domain: ENV["MAILGUN_DOMAIN"],
+    user_name: ENV["MAILGUN_SMTP_USERNAME"],
+    password: ENV["MAILGUN_SMTP_PASSWORD"]
+  }
 end

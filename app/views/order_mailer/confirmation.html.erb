@@ -1,0 +1,14 @@
+<h1>Thank you for your order!</h1>
+
+<p>Hello <%= @user.first_name || @user.email %>,</p>
+
+<p>Your order #<%= @order.id %> has been received.</p>
+
+<p>Total: <%= number_to_currency(@order.total) %></p>
+
+<p>Shipping address:</p>
+<p>
+  <%= @order.order_address %><br>
+  <%= @order.order_city %><br>
+  <%= @order.order_postal_code %>
+</p>

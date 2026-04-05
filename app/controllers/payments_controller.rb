@@ -41,6 +41,7 @@ class PaymentsController < ApplicationController
     )
     session[:cart] = {}
     @order.reload
+    OrderMailer.confirmation(@order).deliver_now
   end
 
   def cancel
