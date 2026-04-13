@@ -3,6 +3,9 @@
       case type.to_sym
       when :notice then "alert-success"
       when :alert then "alert-danger"
+      when :success then "alert-success"
+      when :danger  then "alert-danger"
+      when :warning then "alert-warning"
       else "alert-info"
       end
   %>

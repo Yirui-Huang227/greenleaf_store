@@ -11,7 +11,7 @@ class CartsController < ApplicationController
     session[:cart][product_id] ||= 0
     session[:cart][product_id] += 1
 
-    redirect_to cart_path, notice: "Product added to cart."
+    redirect_to cart_path, flash: { success: "Product added successfully!" }
   end
 
   def update
@@ -20,18 +20,18 @@ class CartsController < ApplicationController
 
     if quantity.positive?
       session[:cart][product_id] = quantity
+      redirect_to cart_path, flash: { success: "Cart updated successfully!" }
     else
       session[:cart].delete(product_id)
+      redirect_to cart_path, flash: { warning: "Item removed because quantity was zero." }
     end
-
-    redirect_to cart_path, notice: "Cart updated."
   end
 
   def remove
     product_id = params[:product_id].to_s
     session[:cart].delete(product_id)
 
-    redirect_to cart_path, notice: "Product removed from cart."
+    redirect_to cart_path, flash: { danger: "Product removed from cart." }
   end
 
   private
